@@ -1,0 +1,36 @@
+div.dual-language-editor-row > div.form-wrapper > div:nth-of-type(1) {
+  float: left;
+  width: 49%;
+}
+div.dual-language-editor-row > div.form-wrapper > div:nth-of-type(2) {
+  float: right;
+  width: 49%;
+}
+div.dual-language-editor-row {
+  width: 100%;
+  clear: both;
+  min-width: 1000px;
+}
+div.dual-language-editor-row h2 {
+  text-align: left;
+  float: left;
+}
+div.dual-language-editor-row span.collapse {
+  display: none;
+}
+div.dual-language-editor-row span.collapse,
+div.dual-language-editor-row span.expand {
+  float: left;
+  margin-top: 11px;
+  margin-left: 10px;
+  color: #0074BD;
+  font-size: 12px;
+  text-decoration: underline;
+  cursor: pointer;
+}
+h2 {
+  float: left;
+}
+div#dual-language-refresh-target > fieldset.form-wrapper > div.fieldset-wrapper > fieldset {
+  clear: both;
+}
