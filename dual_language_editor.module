@@ -107,6 +107,7 @@ function dual_language_editor_add_form_router($entity_type, $bundle_type) {
       'dual_language_editor.pages');
     return dual_language_editor_create_entity($entity_type, $bundle_type);
   } else {
+    module_load_include('inc', 'entity_crud_ui', 'entity_crud_ui.pages');
     // use the default Entity CRUD UI callback to create the entity.
     return entity_crud_ui_create_entity($entity_type, $bundle_type);
   }
@@ -122,6 +123,7 @@ function dual_language_editor_add_form_router($entity_type, $bundle_type) {
  * @return array A form render array.
  */
 function dual_language_editor_form_router($form_id, $entity_type, $entity) {
+  echo 'hi';
   if (dual_language_editor_check($entity_type, $entity)) {
     $form_id = 'dual_language_editor_entity_form';
     module_load_include('inc', 'dual_language_editor',
@@ -149,8 +151,18 @@ function dual_language_editor_check($entity_type, $entity = NULL) {
   if (!user_access('dle access')) {
     return FALSE;
   }
+
+  // we only have the DLE if entity_translation is present (for now)
+  if (!module_exists('entity_translation')) {
+    return FALSE;
+  }
+
   // finally, we only have DLE if entity translation is enabled.
-  return entity_translation_enabled($entity_type->getType());
+  if (!entity_translation_enabled($entity_type->getType())) {
+    return FALSE;
+  }
+
+  return TRUE;
 }
 
 /**

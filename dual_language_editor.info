@@ -2,3 +2,13 @@ name = Dual-Language Editor
 description = "Provides a dual-language editing experience."
 core = 7.x
 package = Content
+
+
+dependencies[] = entity_crud_ui
+dependencies[] = entity_translation
+
+; Information added by drush on 2012-12-05
+version = "unknown"
+project = "dual_language_editor"
+datestamp = "1354734572"
+
