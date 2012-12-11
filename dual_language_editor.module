@@ -123,7 +123,6 @@ function dual_language_editor_add_form_router($entity_type, $bundle_type) {
  * @return array A form render array.
  */
 function dual_language_editor_form_router($form_id, $entity_type, $entity) {
-  echo 'hi';
   if (dual_language_editor_check($entity_type, $entity)) {
     $form_id = 'dual_language_editor_entity_form';
     module_load_include('inc', 'dual_language_editor',
