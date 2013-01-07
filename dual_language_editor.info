@@ -19,3 +19,10 @@ version = "unknown"
 project = "dual_language_editor"
 datestamp = "1354890153"
 
+
+
+; Information added by drush on 2013-01-03
+version = "unknown"
+project = "dual_language_editor"
+datestamp = "1357223963"
+
