@@ -104,8 +104,7 @@ function dual_language_editor_entity_form($form, &$form_state, $entity_type, $en
   );
 
   // Alter the form to include basic properties
-  // @todo this needs to change, to support translatable properties
-  $entity_type->alterForm($form['language_ind'], $form_state, $entity);
+  dual_language_editor_property_attach($form, $form_state, $entity_type, $entity, $primary_lang, $secondary_lang);
 
   // Attach fields to the form
   dual_language_editor_field_attach(
@@ -226,6 +225,45 @@ function dual_language_editor_row_helper(&$container, $left_key, $right_key) {
   // the form properly.
 }
 
+function dual_language_editor_property_attach(&$form, &$form_state, $entity_type, $entity, $primary_lang, $secondary_lang) {
+  $forms = array();
+  $form_keys = array();
+  $forms['und'] = array();
+  $entity_type->alterForm($forms['und'], $form_state, $entity);
+  $languages = array_keys(language_list());
+  $form_keys = array_keys($forms['und']);
+  foreach ($languages as $langcode) {
+    $forms[$langcode] = array();
+    $entity_type->alterForm($forms[$langcode], $form_state, $entity, $langcode);
+    $form_keys = array_merge($form_keys, array_keys($forms[$langcode]));
+  }
+  $form_keys = array_unique($form_keys);
+  foreach ($form_keys as $key) {
+    if (is_array($forms[$primary_lang][$key]) &&
+        !empty($forms[$primary_lang][$key]['#language']) &&
+        $forms[$primary_lang][$key]['#language'] != '#und') {
+      $form['language_dep'][$key] = $forms[$primary_lang][$key];
+      $form['language_dep'][$key]['#language'] = array($primary_lang, $secondary_lang);
+      $form['language_dep'][$key][$secondary_lang] =
+          $forms[$secondary_lang][$key][$secondary_lang];
+      dual_language_editor_row_helper($form['language_dep'][$key], $primary_lang, $secondary_lang);
+    }
+    elseif (!is_array($forms['und'][$key]) || substr($key, 0, 1) == '#') {
+      $form[$key] = $forms['und'][$key];
+    }
+    else {
+      $form['language_ind'][$key] = $forms['und'][$key];
+    }
+  }
+  foreach (module_implements('dual_language_editor_property_attach_alter') as $module) {
+    $function = $module . '_dual_language_editor_property_attach_alter';
+    if (function_exists($function)) {
+      $function($form, $form_state, $entity_type, $entity, $primary_lang, $secondary_lang);
+    }
+  }
+
+}
+
 /**
  * Attaches form fields to a form, for a dual-language approach.
  *
@@ -246,6 +284,7 @@ function dual_language_editor_field_attach(&$form, &$form_state, $entity_type, $
   // language-independent properties correctly.
   $forms['und'] = array();
   field_attach_form($entity_type, $entity, $forms['und'], $form_state, 'und');
+  $form_keys = array_keys($forms['und']);
 
   // Next, let's build each language individually. We build all the languages
   // here because one day we'd like for the hidden languages to still remember

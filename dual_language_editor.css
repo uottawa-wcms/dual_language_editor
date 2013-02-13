@@ -1,7 +1,9 @@
-div.dual-language-editor-row > div.form-wrapper > div:nth-of-type(1) {
+div.dual-language-editor-row > div.form-wrapper > div:nth-of-type(1),
+div.dual-language-editor-row > div.form-wrapper > fieldset:nth-of-type(1) {
   float: left;
   width: 49%;
 }
+div.dual-language-editor-row > div.form-wrapper > fieldset:nth-of-type(2),
 div.dual-language-editor-row > div.form-wrapper > div:nth-of-type(2) {
   float: right;
   width: 49%;
